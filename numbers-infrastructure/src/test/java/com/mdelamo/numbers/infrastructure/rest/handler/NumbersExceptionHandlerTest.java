@@ -1,6 +1,7 @@
 package com.mdelamo.numbers.infrastructure.rest.handler;
 
 import com.mdelamo.numbers.domain.exception.InvalidNumberOrderByBinaryException;
+import com.mdelamo.numbers.infrastructure.rest.controller.NumbersOrdinationController;
 import com.mdelamo.numbers.infrastructure.rest.handler.NumbersExceptionHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import static java.time.LocalDateTime.now;
+import static nl.altindag.log.LogCaptor.forClass;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,10 +52,15 @@ class NumbersExceptionHandlerTest {
         var messageExpected = "TEST_MESSAGE";
         var invalidNumberOrderByBinaryException = new InvalidNumberOrderByBinaryException(codeExpected, messageExpected);
 
-        // when
-        var responseEntityResult = numbersExceptionHandler.handleInvalidNumberOrderByBinaryException(invalidNumberOrderByBinaryException, webRequest);
+        ResponseEntity<Object> responseEntityResult;
+        try (var logCaptor = forClass(NumbersExceptionHandler.class)) {
+            // when
+            responseEntityResult = numbersExceptionHandler.handleInvalidNumberOrderByBinaryException(invalidNumberOrderByBinaryException, webRequest);
 
-        // Then
+            // then
+            assertThat(logCaptor.getWarnLogs()).isNotEmpty();
+        }
+
         var bodyResult = (Map<String, Object>) responseEntityResult.getBody();
         var localDateValue = (LocalDateTime) bodyResult.get(KEY_TIMESTAMP);
         assertThat(localDateValue).isCloseTo(now(), within(DELTA, ChronoUnit.MILLIS));
@@ -69,10 +77,16 @@ class NumbersExceptionHandlerTest {
         var npeMessage = "npeMessage";
         var nullPointerException = new NullPointerException(npeMessage);
 
-        // when
-        var responseEntityResult = numbersExceptionHandler.handleRuntimeException(nullPointerException, webRequest);
 
-        // then
+        ResponseEntity<Object> responseEntityResult;
+        try (var logCaptor = forClass(NumbersExceptionHandler.class)) {
+            // when
+            responseEntityResult = numbersExceptionHandler.handleRuntimeException(nullPointerException, webRequest);
+
+            // then
+            assertThat(logCaptor.getErrorLogs()).isNotEmpty();
+        }
+
         var bodyResult = (Map<String, Object>) responseEntityResult.getBody();
         var localDateValue = (LocalDateTime) bodyResult.get(KEY_TIMESTAMP);
         assertThat(localDateValue).isCloseTo(now(), within(DELTA, ChronoUnit.MILLIS));

@@ -1,6 +1,7 @@
 package com.mdelamo.numbers.infrastructure.rest.handler;
 
 import com.mdelamo.numbers.domain.exception.InvalidNumberOrderByBinaryException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class NumbersExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String TIMESTAMP_KEY = "timestamp";
@@ -24,12 +26,16 @@ public class NumbersExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidNumberOrderByBinaryException.class)
     public ResponseEntity<Object> handleInvalidNumberOrderByBinaryException(final InvalidNumberOrderByBinaryException invalidNumberOrderByBinaryException, WebRequest request) {
-        return createResponseEntity(invalidNumberOrderByBinaryException.getCode(), invalidNumberOrderByBinaryException.getMessage(), HttpStatus.BAD_REQUEST);
+        var responseEntity = createResponseEntity(invalidNumberOrderByBinaryException.getCode(), invalidNumberOrderByBinaryException.getMessage(), HttpStatus.BAD_REQUEST);
+        log.warn("WARN - handleInvalidNumberOrderByBinaryException - error: {}", responseEntity);
+        return responseEntity;
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(final RuntimeException runtimeException, final WebRequest request) {
-        return createResponseEntity(UNEXPECTED_CODE_ERROR, runtimeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        var responseEntity = createResponseEntity(UNEXPECTED_CODE_ERROR, runtimeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        log.error("ERROR - handleRuntimeException - error: {}", responseEntity);
+        return responseEntity;
     }
 
     private ResponseEntity<Object> createResponseEntity(final String code, String message, final HttpStatus httpStatus) {

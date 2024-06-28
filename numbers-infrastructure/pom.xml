@@ -13,8 +13,10 @@
 
     <name>numbers-infrastructure</name>
 
+
     <properties>
         <org.instancio.version>4.8.0</org.instancio.version>
+        <logcaptor.version>2.9.3</logcaptor.version>
     </properties>
 
     <dependencies>
@@ -46,6 +48,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.instancio</groupId>
             <artifactId>instancio-core</artifactId>
             <version>${org.instancio.version}</version>
@@ -53,8 +61,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>io.github.hakky54</groupId>
+            <artifactId>logcaptor</artifactId>
+            <version>${logcaptor.version}</version>
             <scope>test</scope>
         </dependency>
 
