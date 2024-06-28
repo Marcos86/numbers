@@ -1,0 +1,108 @@
+openapi: 3.0.2
+info:
+  title: numbers
+  description: This is a microservice intended to provide operations for making operations with numbers
+  termsOfService: http://swagger.io/terms/
+  version: 0.0.1
+servers:
+  - url: "http://localhost:8080/{basePath}"
+    variables:
+      basePath:
+        default: api/v1
+tags:
+  - name: Numbers ordination
+    description: Numbers ordination operations
+paths:
+  "/numbers-ordenation":
+    post:
+      tags:
+        - Numbers ordination
+      operationId: orderNumbers
+      summary: order select numbers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NumbersRQDTO"
+      responses:
+        "200":
+          description: Numbers ordered with selected criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumbersRSDTO'
+
+        "400":
+          description: "Bad request error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorInfoRSDTO"
+
+        "500":
+          description: "Unexpected internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorInfoRSDTO"
+
+components:
+  schemas:
+    NumbersRQDTO:
+      type: object
+      properties:
+        criteria:
+          type: string
+          description: >
+            Sort order:
+             *  "BINARY: depends on number of set bits. If a tie occurs, its decimal representation shall be used to break this. By default if not present"
+          enum:
+            - BINARY
+        data:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          example: [7,2,1,9,5,3,8,25,42]
+
+    NumbersRSDTO:
+      properties:
+        criteria:
+          type: string
+          description: >
+            Sort order:
+             *  "BINARY: depends on number of set bits. If a tie occurs, its decimal representation shall be used to break this. By default if not present"
+        data:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          example: [1,2,8,3,5,9,7,25,42]
+
+
+    ErrorInfoRSDTO:
+      type: object
+      description: Error info response.
+      properties:
+        timestamp:
+          type: string
+          format: timestamp
+          description: Timestamp from error.
+          example: '2021-01-01T00:00:00.000'
+        error:
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/ErrorDetailRSDTO"
+
+    ErrorDetailRSDTO:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: Error code.
+          example: '1'
+        message:
+          type: string
+          description: Description from error.
+          example: 'This is a description from error detailed.'

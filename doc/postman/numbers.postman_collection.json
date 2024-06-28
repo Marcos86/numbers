@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "f0f9ff00-47bc-4f3c-9d09-b0cd3ace69d2",
+		"name": "Numbers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4803708",
+		"_collection_link": "https://martian-meadow-425215.postman.co/workspace/Inditex~755c01f9-ab0d-412d-a6a9-4e5ed1bbee91/collection/4803708-f0f9ff00-47bc-4f3c-9d09-b0cd3ace69d2?action=share&source=collection_link&creator=4803708"
+	},
+	"item": [
+		{
+			"name": "Order numbers by binary representation (7,2,1,9,5,3,8,25,42 ->1,2,8,3,5,9,7,25,42 )",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"criteria\": \"BINARY\",\r\n    \"data\": [\r\n        7,\r\n        2,\r\n        1,\r\n        9,\r\n        5,\r\n        3,\r\n        8,\r\n        25,\r\n        42\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/numbers-ordination",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"numbers-ordination"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order numbers by binary representation (1,28,4,2,6,9,55,15,27,46,11,128,16) -> (1,2,4,16,128,6,9,11,28,15,27,46,55)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"data\": [\r\n1,28,4,2,6,9,55,15,27,46,11,128,16\r\n]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/numbers-ordination",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"numbers-ordination"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order numbers by binary representation (1,28,-4,6) -> InvalidNumberOrderByBinaryException",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"data\": [\r\n1,28,-4,6\r\n]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/numbers-ordination",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"numbers-ordination"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
